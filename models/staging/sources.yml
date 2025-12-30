@@ -1,13 +1,25 @@
-
 version: 2
 
 sources:
   - name: olist_raw
-    description: ""
+    description: "Raw data ingested from the Olist e-commerce dataset into Snowflake without any transformation."
     loader: snowflake_stage
     database: OLIST_DB_BRONZE
     schema: INGEST
+
+    quoting:
+      database: false
+      schema: false
+      identifier: false
+
+    freshness:
+      warn_after: { count: 24, period: hour }
+      error_after: { count: 48, period: hour }
+
+
     tables:
+
+      #category_name_translation_raw
       - name: category_name_translation_raw
         description: "Translation table that maps original product category names in Portuguese to their English equivalents, as provided in the raw Olist dataset."
         columns:
@@ -18,12 +30,15 @@ sources:
             data_type: varchar
             description: "English translation of the original product category name."
 
+      #customers_raw
       - name: customers_raw
         description: "Raw customers data containing customer identifiers and location information, as received from the Olist dataset."
         columns:
           - name: customer_id
             data_type: varchar
             description: "Identifier of a customer instance associated with an order. A single customer_unique_id may be linked to multiple customer_id values."
+            tests:
+              - not_null
           - name: customer_unique_id
             data_type: varchar
             description: "Unique identifier of a customer across multiple orders."
@@ -37,6 +52,7 @@ sources:
             data_type: varchar
             description: "State where the customer is located."
 
+      #geolocation_raw
       - name: geolocation_raw
         description: "Raw geolocation reference data containing latitude and longitude information for Brazilian postal code prefixes, as provided in the Olist dataset."
         columns:
@@ -56,6 +72,7 @@ sources:
             data_type: varchar
             description: "State associated with the postal code prefix."
 
+      #order_items_raw
       - name: order_items_raw
         description: "Raw order items data containing line-level details for each product included in an order, as received from the Olist dataset."
         columns:
@@ -81,6 +98,7 @@ sources:
             data_type: varchar
             description: "Shipping cost charged for the order item."
 
+      #order_payments_raw
       - name: order_payments_raw
         description: "Raw order payments data containing information about the payment methods and amounts used for each order, as received from the Olist dataset."
         columns:
@@ -100,6 +118,7 @@ sources:
             data_type: varchar
             description: "Total value paid using this payment method."
 
+      #order_reviews_raw
       - name: order_reviews_raw
         description: "Raw customer reviews data containing ratings and optional comments associated with orders, as received from the Olist dataset."
         columns:
@@ -125,12 +144,13 @@ sources:
             data_type: varchar
             description: "Timestamp indicating when the review received a response, if applicable."
 
+      #orders_raw
       - name: orders_raw
         description: "Raw orders data containing order lifecycle information, as received from the Olist e-commerce dataset."
         columns:
           - name: order_id
             data_type: varchar
-            description: "unique identifier of an order."
+            description: "Unique identifier of an order."
           - name: customer_id
             data_type: varchar
             description: "Identifier of the customer instance associated with the order."
@@ -153,6 +173,7 @@ sources:
             data_type: varchar
             description: "Estimated delivery date provided to the customer at the time of purchase."
 
+      #products_raw
       - name: products_raw
         description: "Raw product data containing product attributes and physical characteristics, as received from the Olist dataset."
         columns:
@@ -184,6 +205,7 @@ sources:
             data_type: varchar
             description: "Width of the product in centimeters."
 
+      #sellers_raw
       - name: sellers_raw
         description: "Raw sellers data containing seller identifiers and location information, as received from the Olist dataset."
         columns:
