@@ -1,0 +1,290 @@
+version: 2
+
+sources:
+  - name: olist_raw
+    description: "Raw data ingested from the Olist e-commerce dataset into Snowflake without any transformation."
+    loader: snowflake_stage
+    database: OLIST_DB_BRONZE
+    schema: INGEST
+
+    quoting:
+      database: false
+      schema: false
+      identifier: false
+    config:
+      freshness:
+        warn_after: { count: 24, period: hour }
+        error_after: { count: 48, period: hour }
+
+
+    tables:
+
+      #category_name_translation_raw
+      - name: category_name_translation_raw
+        description: "Translation table that maps original product category names in Portuguese to their English equivalents."
+        columns:
+          - name: product_category_name
+            data_type: varchar
+            description: "Original product category name in Portuguese."
+            tests:
+              - not_null
+          - name: product_category_name_english
+            data_type: varchar
+            description: "English translation of the original product category name."
+            tests:
+              - not_null
+
+      #customers_raw
+      - name: customers_raw
+        description: "Raw customers data containing customer identifiers and location information."
+        columns:
+          - name: customer_id
+            data_type: varchar
+            description: "Identifier of a customer instance associated with an order. A single customer_unique_id may be linked to multiple customer_id values."
+            tests:
+              - not_null
+          - name: customer_unique_id
+            data_type: varchar
+            description: "Unique identifier of a customer across multiple orders."
+            tests:
+              - not_null
+          - name: customer_zip_code_prefix
+            data_type: varchar
+            description: "First digits of the customer's postal code."
+            tests:
+              - not_null
+          - name: customer_city
+            data_type: varchar
+            description: "City where the customer is located."
+            tests:
+              - not_null
+          - name: customer_state
+            data_type: varchar
+            description: "State where the customer is located."
+            tests:
+              - not_null
+
+      #geolocation_raw
+      - name: geolocation_raw
+        description: "Raw geolocation reference data containing latitude and longitude information for Brazilian postal code prefixes."
+        columns:
+          - name: geolocation_zip_code_prefix
+            data_type: varchar
+            description: "First digits of the Brazilian postal code associated with the geographic coordinates."
+            tests:
+              - not_null
+          - name: geolocation_lat
+            data_type: varchar
+            description: "Latitude coordinate corresponding to the postal code prefix."
+            tests:
+              - not_null
+          - name: geolocation_lng
+            data_type: varchar
+            description: "Longitude coordinate corresponding to the postal code prefix."
+            tests:
+              - not_null
+          - name: geolocation_city
+            data_type: varchar
+            description: "City associated with the postal code prefix."
+            tests:
+              - not_null
+          - name: geolocation_state
+            data_type: varchar
+            description: "State associated with the postal code prefix."
+            tests:
+              - not_null
+
+      #order_items_raw
+      - name: order_items_raw
+        description: "Raw order items data containing line-level details for each product included in an order."
+        columns:
+          - name: order_id
+            data_type: varchar
+            description: "Identifier of the order associated with the order item."
+            tests:
+              - not_null
+          - name: order_item_id
+            data_type: varchar
+            description: "Sequential number identifying the item within a given order."
+            tests:
+              - not_null
+          - name: product_id
+            data_type: varchar
+            description: "Identifier of the product included in the order item."
+            tests:
+              - not_null
+          - name: seller_id
+            data_type: varchar
+            description: "Identifier of the seller responsible for fulfilling the order item."
+            tests:
+              - not_null
+          - name: shipping_limit_date
+            data_type: varchar
+            description: "Deadline by which the seller is expected to ship the order item."
+            tests:
+              - not_null
+          - name: price
+            data_type: varchar
+            description: "Price of the product at the time of purchase, excluding shipping costs."
+            tests:
+              - not_null
+          - name: freight_value
+            data_type: varchar
+            description: "Shipping cost charged for the order item."
+            tests:
+              - not_null
+
+      #order_payments_raw
+      - name: order_payments_raw
+        description: "Raw order payments data containing information about the payment methods and amounts used for each order."
+        columns:
+          - name: order_id
+            data_type: varchar
+            description: "Identifier of the order associated with the payment record."
+            tests:
+              - not_null
+          - name: payment_sequential
+            data_type: varchar
+            description: "Sequential number indicating the order of the payment within a given order."
+            tests:
+              - not_null
+          - name: payment_type
+            data_type: varchar
+            description: "Method of payment used by the customer."
+            tests:
+              - not_null
+          - name: payment_installments
+            data_type: varchar
+            description: "Number of installments chosen for the payment."
+          - name: payment_value
+            data_type: varchar
+            description: "Total value paid using this payment method."
+            tests:
+              - not_null
+
+      #order_reviews_raw
+      - name: order_reviews_raw
+        description: "Raw customer reviews data containing ratings and optional comments associated with orders."
+        columns:
+          - name: review_id
+            data_type: varchar
+            description: "Unique identifier of the review."
+            tests:
+              - not_null
+          - name: order_id
+            data_type: varchar
+            description: "Identifier of the order associated with the review."
+            tests:
+              - not_null
+          - name: review_score
+            data_type: varchar
+            description: "Rating score given by the customer for the order, typically ranging from 1 to 5."
+            tests:
+              - not_null
+          - name: review_comment_title
+            data_type: varchar
+            description: "Short title provided by the customer for the review, if available."
+          - name: review_comment_message
+            data_type: varchar
+            description: "Detailed text comment provided by the customer for the review, if available."
+          - name: review_creation_date
+            data_type: varchar
+            description: "Timestamp indicating when the review was created by the customer."
+          - name: review_answer_timestamp
+            data_type: varchar
+            description: "Timestamp indicating when the review received a response, if applicable."
+
+      #orders_raw
+      - name: orders_raw
+        description: "Raw orders data containing order lifecycle information."
+        columns:
+          - name: order_id
+            data_type: varchar
+            description: "Unique identifier of an order."
+            tests:
+              - not_null
+              - unique
+          - name: customer_id
+            data_type: varchar
+            description: "Identifier of the customer instance associated with the order."
+            tests:
+              - not_null
+          - name: order_status
+            data_type: varchar
+            description: "Current status of the order lifecycle."
+            tests:
+              - not_null
+          - name: order_purchase_timestamp
+            data_type: varchar
+            description: "Timestamp when the order was placed by the customer."
+          - name: order_approved_at
+            data_type: varchar
+            description: "Timestamp when the order payment was approved."
+          - name: order_delivered_carrier_date
+            data_type: varchar
+            description: "Timestamp when the order was handed over to the carrier for delivery."
+          - name: order_delivered_customer_date
+            data_type: varchar
+            description: "Timestamp when the order was delivered to the customer."
+          - name: order_estimated_delivery_date
+            data_type: varchar
+            description: "Estimated delivery date provided to the customer at the time of purchase."
+
+      #products_raw
+      - name: products_raw
+        description: "Raw product data containing product attributes and physical characteristics."
+        columns:
+          - name: product_id
+            data_type: varchar
+            description: "Unique identifier of a product."
+            tests:
+              - not_null
+          - name: product_category_name
+            data_type: varchar
+            description: "Original product category name in Portuguese."
+
+          - name: product_name_lenght
+            data_type: varchar
+            description: "Length of the product name description, as provided in the raw dataset."
+          - name: product_description_lenght
+            data_type: varchar
+            description: "Length of the product description text, as provided in the raw dataset."
+          - name: product_photos_qty
+            data_type: varchar
+            description: "Number of photos available for the product."
+          - name: product_weight_g
+            data_type: varchar
+            description: "Weight of the product in grams."
+          - name: product_length_cm
+            data_type: varchar
+            description: "Length of the product in centimeters."
+          - name: product_height_cm
+            data_type: varchar
+            description: "Height of the product in centimeters."
+          - name: product_width_cm
+            data_type: varchar
+            description: "Width of the product in centimeters."
+
+      #sellers_raw
+      - name: sellers_raw
+        description: "Raw sellers data containing seller identifiers and location information, as received from the Olist dataset."
+        columns:
+          - name: seller_id
+            data_type: varchar
+            tests:
+              - not_null
+          - name: seller_zip_code_prefix
+            data_type: varchar
+            description: "First digits of the seller's postal code."
+            tests:
+              - not_null
+          - name: seller_city
+            data_type: varchar
+            description: "City where the seller is located."
+            tests:
+              - not_null
+          - name: seller_state
+            data_type: varchar
+            description: "State where the seller is located."
+            tests:
+              - not_null
