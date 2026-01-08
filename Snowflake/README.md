@@ -3,6 +3,17 @@
 This folder contains the SQL script used to set up the Snowflake environment
 and ingest the Olist dataset into the Bronze layer.
 
+### Data typing strategy in the Bronze layer
+
+All columns in the Bronze layer are ingested as `VARCHAR`.
+
+This is a deliberate design choice to ensure that no data is lost during ingestion,
+especially when dealing with raw CSV files that may contain inconsistent or malformed values.
+
+Data type casting and validation are intentionally deferred to the staging layer,
+where data quality checks and transformations are applied in a controlled manner using dbt.
+
+
 ### What this script does
 The `bronze_ingestion.sql` script performs the following steps:
 
