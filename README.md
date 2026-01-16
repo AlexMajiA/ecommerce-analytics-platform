@@ -1,15 +1,71 @@
-Welcome to your new dbt project!
+# Data Engineering Project – ELT Pipeline with dbt & Snowflake
 
-### Using the starter project
+## Overview
+This project is a Data Engineering initiative focused on building an ELT pipeline using **dbt** and **Snowflake**, based on a real e-commerce dataset (Olist, Brazil).
 
-Try running the following commands:
-- dbt run
-- dbt test
+The goal is to design a scalable and maintainable data platform oriented to analytics use cases, following best practices in data modeling and transformation.
 
+---
 
-### Resources:
-- Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)
-- Check out [Discourse](https://discourse.getdbt.com/) for commonly asked questions and answers
-- Join the [dbt community](https://getdbt.com/community) to learn from other analytics engineers
-- Find [dbt events](https://events.getdbt.com) near you
-- Check out [the blog](https://blog.getdbt.com/) for the latest news on dbt's development and best practices
+## Current Status
+✅ Data ingestion completed in Snowflake  
+✅ Staging layer (`stg`) implemented with data cleaning, standardization and validation  
+🚧 Analytical modeling layer in progress
+
+---
+
+## Architecture
+- **Data Warehouse:** Snowflake  
+- **Transformation approach:** ELT  
+- **Transformation tool:** dbt  
+- **Data layers:**
+  - RAW: ingested source data
+  - STG: cleaned and standardized staging models
+  - (Planned) Analytics layer for business-oriented models
+
+---
+
+## Dataset
+Real-world e-commerce dataset including:
+- orders
+- customers
+- payments
+- reviews
+
+---
+
+## Project Structure
+models/
+staging/
+macros/
+tests/
+snapshots/
+seeds/
+
+---
+
+## Data Quality & Testing
+The project includes:
+- basic dbt tests (`not_null`, `unique`)
+- source validation
+- structured staging models to ensure data consistency
+
+---
+
+## How to Run
+```bash
+dbt deps
+dbt run
+dbt test
+```
+---
+
+## Next Steps
+
+Develop analytical models (facts & dimensions)
+
+Add business metrics
+
+Extend data quality tests
+
+Generate dbt documentation
