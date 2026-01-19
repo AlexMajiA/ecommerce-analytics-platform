@@ -9,12 +9,12 @@ renamed as (
 
     select
         order_id,
-        order_item_id,
+        cast (order_item_id as INTEGER)                                 as order_item_id,
         product_id,
         seller_id,
-        shipping_limit_date,
-        price,
-        freight_value,
+        cast(shipping_limit_date as TIMESTAMP)                          as shipping_limit_date,
+        cast(trim(replace(price, ',','.')) as decimal(10,2))          as price,
+        cast(trim(replace(freight_value, ',','.')) as decimal(10,2))  as freight_value
     from source
 
 )
