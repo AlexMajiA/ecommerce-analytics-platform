@@ -2,7 +2,7 @@
 # Name your project! Project names should contain only lowercase characters
 # and underscores. A good package name should reflect your organization's
 # name or the intended use of these models
-name: 'olist_db'
+name: 'olist_analytics'
 version: '1.0.0'
 config-version: 2
 
@@ -41,19 +41,19 @@ models:
 
     # SILVER (STAGING)
     staging:
-      +database: OLIST_ANALYTICS_SILVER
+      +database: OLIST_DB_SILVER
       +schema: STAGING
       +materialized: view
 
     # INTERMEDIATE
     intermediate:
-      +database: OLIST_ANALYTICS_SILVER
+      +database: OLIST_DB_SILVER
       +schema: INTERMEDIATE
       +materialized: view
 
     # GOLD (MARTS)
     marts:
-      +database: OLIST_ANALYTICS_GOLD
+      +database: OLIST_DB_GOLD
       +schema: ANALYTICS
       +materialized: table
 
