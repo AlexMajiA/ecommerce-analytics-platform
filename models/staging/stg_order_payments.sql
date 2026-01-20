@@ -1,3 +1,8 @@
+{{ 
+    config(
+    materialized='view', alias='mv_stg_orders_payments'
+    ) 
+}}
 with source as (
 
     select *
@@ -10,9 +15,9 @@ renamed as (
     select
         order_id,
         payment_sequential,
-        payment_type,
-        payment_installments,
-        payment_value
+        trim(lower(payment_type))                                       as payment_type,
+        cast(payment_installments as integer)                           as payment_installments,
+        cast(trim(replace(payment_value, ',','.')) as decimal (10,2))   as payment_value
     from source
 
 )
