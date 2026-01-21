@@ -1,3 +1,9 @@
+{{
+    config(
+        materialized='view', alias='mv_stg_category_name_translation'
+    )
+}}
+
 with source as (
 
     select *
@@ -8,8 +14,8 @@ with source as (
 renamed as (
 
     select
-        product_category_name,
-        product_category_name_english
+        trim(lower(replace(product_category_name,'_',' ')))             as product_category_name,
+        trim(lower(replace(product_category_name_english,'_',' ')))     as product_category_name_english     
     from source
 
 )
