@@ -1,6 +1,6 @@
 {{ 
     config(
-    materialized='view', alias='mv_stg_products_raw'
+    materialized='view', alias='mv_stg_products'
     ) 
 }}
 
