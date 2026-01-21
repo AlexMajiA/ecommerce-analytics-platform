@@ -11,7 +11,7 @@ with source as (
 
 ),
 
-renamed as (
+cleaned as (
 
     select
         product_id,
@@ -28,4 +28,4 @@ renamed as (
 )
 
 select *
-from renamed
+from cleaned

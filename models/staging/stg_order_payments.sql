@@ -10,7 +10,7 @@ with source as (
 
 ),
 
-renamed as (
+cleaned as (
 
     select
         order_id,
@@ -23,4 +23,4 @@ renamed as (
 )
 
 select *
-from renamed
+from cleaned

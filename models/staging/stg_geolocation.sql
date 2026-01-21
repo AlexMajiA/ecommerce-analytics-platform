@@ -11,7 +11,7 @@ with source as (
 
 ),
 
-renamed as (
+cleaned as (
 
     select
         geolocation_zip_code_prefix,
@@ -24,4 +24,4 @@ renamed as (
 )
 
 select *
-from renamed
+from cleaned

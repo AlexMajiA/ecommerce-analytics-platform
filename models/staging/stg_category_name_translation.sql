@@ -11,7 +11,7 @@ with source as (
 
 ),
 
-renamed as (
+cleaned as (
 
     select
         trim(lower(replace(product_category_name,'_',' ')))             as product_category_name,
@@ -21,4 +21,4 @@ renamed as (
 )
 
 select *
-from renamed
+from cleaned
