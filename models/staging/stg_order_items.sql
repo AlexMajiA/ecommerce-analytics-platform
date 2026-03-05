@@ -1,3 +1,10 @@
+{{
+    config(
+        materialized='view', alias='mv_stg_orders_item'
+    )
+}}
+
+
 with source as (
 
     select *
@@ -9,10 +16,10 @@ cleaned as (
 
     select
         order_id,
-        cast (order_item_id as INTEGER)                                 as order_item_id,
+        cast (order_item_id as INTEGER)                               as order_item_id,
         product_id,
         seller_id,
-        cast(shipping_limit_date as TIMESTAMP)                          as shipping_limit_date,
+        cast(shipping_limit_date as TIMESTAMP)                        as shipping_limit_date,
         cast(trim(replace(price, ',','.')) as decimal(10,2))          as price,
         cast(trim(replace(freight_value, ',','.')) as decimal(10,2))  as freight_value
     from source

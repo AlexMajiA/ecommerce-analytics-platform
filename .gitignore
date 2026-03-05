@@ -20,6 +20,9 @@ Thumbs.db
 venv/
 env/
 
+# Local Snowflake config (credenciales / variables sensibles)
+config_local.sql
+
 # Temporary files
 *.log
 *.tmp
