@@ -288,3 +288,43 @@ sources:
             description: "State where the seller is located."
             tests:
               - not_null
+
+      # customer_profile_raw
+      - name: customer_profile_raw
+        description: "Raw customer profile data generated with Faker and stored in Snowflake. Contains demographic and marketing attributes for each customer."
+
+        columns:
+          - name: customer_unique_id
+            data_type: varchar
+            description: "Unique identifier representing a real customer across multiple orders."
+            tests:
+              - not_null
+              - unique
+
+          - name: gender
+            data_type: varchar
+            description: "Gender of the customer generated using Faker."
+            tests:
+              - not_null
+
+          - name: birth_date
+            data_type: varchar
+            description: "Customer birth date generated using Faker."
+            tests:
+              - not_null
+
+          - name: signup_date
+            data_type: varchar
+            description: "Date when the customer registered on the platform."
+
+          - name: loyalty_tier
+            data_type: varchar
+            description: "Customer loyalty tier assigned based on simulated distribution (bronze, silver, gold, platinum)."
+
+          - name: marketing_opt_in
+            data_type: varchar
+            description: "Flag indicating whether the customer agreed to receive marketing communications."
+
+          - name: acquisition_channel
+            data_type: varchar
+            description: "Marketing channel through which the customer was acquired (organic, paid_ads, referral, social)."
