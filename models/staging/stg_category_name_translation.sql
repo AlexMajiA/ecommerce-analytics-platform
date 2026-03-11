@@ -6,7 +6,9 @@
 
 with source as (
 
-    select *
+    select 
+        product_category_name,
+        product_category_name_english
     from {{ source('olist_raw', 'category_name_translation_raw') }}
 
 ),
