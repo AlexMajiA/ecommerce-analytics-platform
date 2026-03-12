@@ -24,7 +24,7 @@ with date_spine as (
         quarter(date_day) as quarter,
 
         case 
-            when dayofweek(date_day) in (6,7) then true
+            when dayofweek(date_day) in (0,6) then true
             else false
         end as is_weekend
 

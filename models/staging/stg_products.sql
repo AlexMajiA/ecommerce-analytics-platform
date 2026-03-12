@@ -25,6 +25,11 @@ cleaned as (
     select
         product_id,
         trim(lower(replace(product_category_name,'_',' ')))     as product_category_name,
+            case
+                when product_category_name is null
+                then 'sin categoria'
+                else product_category_name
+            end,
         cast(product_name_lenght as integer)                    as product_name_lenght,
         cast(product_description_lenght as integer)             as product_description_lenght,
         cast(product_photos_qty as integer)                     as product_photos_qty,
@@ -33,7 +38,7 @@ cleaned as (
         cast(product_height_cm as integer)                      as product_height_cm,
         cast(product_width_cm as integer)                       as product_width_cm
     from source
-
+    
 )
 
 select *
