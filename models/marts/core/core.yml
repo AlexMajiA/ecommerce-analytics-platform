@@ -43,3 +43,32 @@ models:
 
       - name: customer_unique_id
         description: "Business identifier of the customer."
+
+  - name: dim_products
+    description: "Product dimension containing descriptive attributes of each product."
+
+    columns:
+
+      - name: product_id
+        description: "Primary key of the product."
+        tests:
+          - unique
+          - not_null
+
+      - name: product_category_name
+        description: "Original product category name from the source dataset (Portuguese)."
+
+      - name: product_category_name_english
+        description: "Translated product category name used for analytics."
+
+      - name: product_weight_g
+        description: "Weight of the product in grams."
+
+      - name: product_length_cm
+        description: "Product length in centimeters."
+
+      - name: product_height_cm
+        description: "Product height in centimeters."
+
+      - name: product_width_cm
+        description: "Product width in centimeters."
