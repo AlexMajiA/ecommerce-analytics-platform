@@ -24,12 +24,12 @@ cleaned as (
 
     select
         product_id,
-        trim(lower(replace(product_category_name,'_',' ')))     as product_category_name,
-            case
-                when product_category_name is null
-                then 'sin categoria'
-                else product_category_name
-            end,
+
+        coalesce(
+            trim(lower(replace(product_category_name,'_',' '))),
+            'uncategorised'
+        ) as product_category_name,
+        
         cast(product_name_lenght as integer)                    as product_name_lenght,
         cast(product_description_lenght as integer)             as product_description_lenght,
         cast(product_photos_qty as integer)                     as product_photos_qty,
