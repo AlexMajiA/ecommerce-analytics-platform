@@ -2,6 +2,7 @@ version: 2
 
 models:
 
+  # DIM_DATE
   - name: dim_date
     description: "Calendar dimension used for time-based analysis."
 
@@ -19,17 +20,11 @@ models:
           - not_null
 
       - name: year
-        description: "Year component of the date."
-
       - name: month
-        description: "Month number (1-12)."
-
       - name: month_name
-        description: "Month name."
-
       - name: day_of_week
-        description: "Day of the week."
 
+  # DIM_CUSTOMERS
   - name: dim_customers
     description: "Customer dimension enriched with demographic and marketing attributes."
 
@@ -44,6 +39,7 @@ models:
       - name: customer_unique_id
         description: "Business identifier of the customer."
 
+  # DIM_PRODUCTS
   - name: dim_products
     description: "Product dimension containing descriptive attributes of each product."
 
@@ -56,19 +52,73 @@ models:
           - not_null
 
       - name: product_category_name
-        description: "Original product category name from the source dataset (Portuguese)."
-
       - name: product_category_name_english
-        description: "Translated product category name used for analytics."
-
       - name: product_weight_g
-        description: "Weight of the product in grams."
-
       - name: product_length_cm
-        description: "Product length in centimeters."
-
       - name: product_height_cm
-        description: "Product height in centimeters."
-
       - name: product_width_cm
-        description: "Product width in centimeters."
+
+  # DIM_SELLER
+  - name: dim_seller
+    description: "Seller dimension containing location and identification data."
+
+    columns:
+
+      - name: seller_id
+        description: "Primary key of the seller."
+        tests:
+          - unique
+          - not_null
+
+  # FCT_SALES
+  - name: fct_sales
+    description: "Fact table containing sales transactions at order item level."
+
+    columns:
+
+      - name: order_id
+        description: "Order identifier."
+
+      - name: order_item_id
+        description: "Order item identifier (granularity of the fact)."
+
+      - name: product_id
+        description: "Foreign key to dim_products."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_products')
+              field: product_id
+
+      - name: seller_id
+        description: "Foreign key to dim_seller."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_seller')
+              field: seller_id
+
+      - name: customer_id
+        description: "Foreign key to dim_customers."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+
+      - name: date_key
+        description: "Foreign key to dim_date."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: date_key
+
+      - name: price
+        description: "Price of the product."
+
+      - name: freight_value
+        description: "Shipping cost associated with the product."
+
+      - name: total_item_amount
+        description: "Total value of the order item (price + freight)."
