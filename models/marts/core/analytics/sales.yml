@@ -1,0 +1,25 @@
+version: 2
+
+models:
+  - name: mart_top_products
+    description: "Aggregated sales by product and month"
+
+    columns:
+      - name: product_id
+        tests:
+          - not_null
+
+      - name: year
+        tests:
+          - not_null
+
+      - name: month
+        tests:
+          - not_null
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - product_id
+            - year
+            - month

@@ -17,7 +17,7 @@ with date_spine as (
         year(date_day) as year,
         month(date_day) as month,
         to_char(date_day,'MMMM')                    as month_name,
-        initcap(trim(to_char(date_day, 'DY')))     as day_name,
+        initcap(trim(to_char(date_day, 'DY')))      as day_name,
 
         day(date_day)                               as day_of_month,
         dayofweek(date_day)                         as day_of_week,
