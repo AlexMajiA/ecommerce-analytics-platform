@@ -23,3 +23,47 @@ models:
             - product_id
             - year
             - month
+
+  # MART_SALES_BY_STATE
+  - name: mart_sales_by_state
+    description: "Monthly aggregated sales metrics by customer state"
+
+    columns:
+
+      # DIMENSIONS
+      - name: customer_state
+        description: "State of the customer where the order was delivered"
+        tests:
+          - not_null
+
+      - name: year
+        description: "Year of the order"
+        tests:
+          - not_null
+
+      - name: month
+        description: "Month number of the order (1-12)"
+        tests:
+          - not_null
+
+      - name: month_name
+        description: "Name of the month"
+
+      # METRICS
+      - name: total_revenue
+        description: "Total revenue generated from sales"
+        tests:
+          - not_null
+
+      - name: avg_order_value
+        description: "Average revenue per order (AOV)"
+
+      - name: total_orders
+        description: "Number of distinct orders"
+        tests:
+          - not_null
+
+      - name: total_items_sold
+        description: "Total number of items sold"
+        tests:
+          - not_null
