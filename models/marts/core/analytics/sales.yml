@@ -67,3 +67,48 @@ models:
         description: "Total number of items sold"
         tests:
           - not_null
+
+
+  # MART_CUSTOMER_ANALYSIS
+  - name: mart_customer_analysis
+    description: "Customer behavior mart with monthly aggregation, revenue, orders and customer type classification."
+
+    columns:
+
+      - name: customer_unique_id
+        description: "Unique identifier of the customer"
+        tests:
+          - not_null
+
+      - name: year
+        description: "Year of the transaction"
+        tests:
+          - not_null
+
+      - name: month
+        description: "Month of the transaction"
+        tests:
+          - not_null
+
+      - name: total_orders
+        description: "Total number of orders per customer and month"
+        tests:
+          - not_null
+
+      - name: total_revenue
+        description: "Total revenue per customer and month"
+        tests:
+          - not_null
+
+      - name: customer_type
+        description: "Classification of customer as new or repeat"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['new', 'repeat']
+
+      - name: gender
+        description: "Customer gender"
+
+      - name: loyalty_tier
+        description: "Latest loyalty tier of the customer"
