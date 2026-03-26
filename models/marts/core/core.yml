@@ -78,9 +78,13 @@ models:
 
       - name: order_id
         description: "Order identifier."
+        tests:
+          - not_null
 
       - name: order_item_id
         description: "Order item identifier (granularity of the fact)."
+        tests:
+          - not_null
 
       - name: product_id
         description: "Foreign key to dim_products."
@@ -122,3 +126,9 @@ models:
 
       - name: total_item_amount
         description: "Total value of the order item (price + freight)."
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - order_id
+            - order_item_id

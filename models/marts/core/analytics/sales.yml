@@ -69,46 +69,86 @@ models:
           - not_null
 
 
-  # MART_CUSTOMER_ANALYSIS
-  - name: mart_customer_analysis
-    description: "Customer behavior mart with monthly aggregation, revenue, orders and customer type classification."
+  # MART_CUSTOMER_BASE
+  - name: mart_customer_base
+    description: "Base customer mart with monthly metrics, recency and attributes. Source for RFM analysis."
 
     columns:
 
       - name: customer_unique_id
-        description: "Unique identifier of the customer"
         tests:
           - not_null
 
       - name: year
-        description: "Year of the transaction"
         tests:
           - not_null
 
       - name: month
-        description: "Month of the transaction"
         tests:
           - not_null
 
       - name: total_orders
-        description: "Total number of orders per customer and month"
         tests:
           - not_null
 
       - name: total_revenue
-        description: "Total revenue per customer and month"
         tests:
           - not_null
 
+      - name: avg_order_value
+
+      - name: recency_days
+
       - name: customer_type
-        description: "Classification of customer as new or repeat"
         tests:
           - not_null
           - accepted_values:
               values: ['new', 'repeat']
 
-      - name: gender
-        description: "Customer gender"
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - customer_unique_id
+            - year
+            - month
 
-      - name: loyalty_tier
-        description: "Latest loyalty tier of the customer"
+
+  # MART_CUSTOMER_RFM
+  - name: mart_customer_rfm
+    description: "Customer segmentation using RFM (Recency, Frequency, Monetary) scores."
+
+    columns:
+
+      - name: customer_unique_id
+        tests:
+          - not_null
+
+      - name: year
+        tests:
+          - not_null
+
+      - name: month
+        tests:
+          - not_null
+
+      - name: recency_score
+        tests:
+          - not_null
+
+      - name: frequency_score
+        tests:
+          - not_null
+
+      - name: monetary_score
+        tests:
+          - not_null
+
+      - name: rfm_segment
+        description: "Concatenation of RFM scores"
+
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - customer_unique_id
+            - year
+            - month
