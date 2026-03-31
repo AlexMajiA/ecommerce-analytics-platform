@@ -22,12 +22,10 @@ with source as (
     from {{ source('olist_raw', 'order_items_raw_ingested') }}
 
     {% if is_incremental() %}
-    where source.batch_id is not null
-      and not exists (
-          select 1
-          from {{ this }} t
-          where t.batch_id = source.batch_id
-      )
+        where ingest_timestamp >= (
+            select coalesce(max(ingest_timestamp), '1900-01-01')
+            from {{ this }}
+        )
     {% endif %}
 
 ),
