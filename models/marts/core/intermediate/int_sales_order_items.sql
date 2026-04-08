@@ -9,7 +9,8 @@ with order_items as (
         product_id,
         seller_id,
         price,
-        freight_value
+        freight_value,
+        ingest_timestamp
     from
         {{ ref("stg_order_items")}}    
 
@@ -38,7 +39,9 @@ sales as (
         oi.price,
         oi.freight_value,     
 
-        oi.price + oi.freight_value as total_item_amount
+        oi.price + oi.freight_value as total_item_amount,
+
+        oi.ingest_timestamp
 
     from
         order_items oi

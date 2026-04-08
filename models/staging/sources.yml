@@ -328,3 +328,39 @@ sources:
           - name: acquisition_channel
             data_type: varchar
             description: "Marketing channel through which the customer was acquired (organic, paid_ads, referral, social)."
+
+      # ORDER_ITEMS_RAW_INGESTED
+      - name: order_items_raw_ingested
+        description: "Raw order items data enriched with ingestion metadata (ingest_timestamp, batch_id, source_file) to support incremental processing and data lineage."
+
+        columns:
+          - name: order_id
+            description: "Unique identifier of the order."
+            tests:
+              - not_null
+
+          - name: order_item_id
+            description: "Identifier of the item within the order."
+            tests:
+              - not_null
+
+          - name: product_id
+          - name: seller_id
+          - name: shipping_limit_date
+          - name: price
+          - name: freight_value
+
+          - name: ingest_timestamp
+            description: "Timestamp when the record was ingested into the system."
+
+          - name: batch_id
+            description: "Identifier of the ingestion batch."
+
+          - name: source_file
+            description: "Source file from which the record was loaded."
+
+        tests:
+          - dbt_utils.unique_combination_of_columns:
+              combination_of_columns:
+                - order_id
+                - order_item_id

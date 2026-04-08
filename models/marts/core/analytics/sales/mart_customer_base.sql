@@ -56,7 +56,6 @@ aggregated as (
         count(distinct order_id) as total_orders,
         sum(total_item_amount) as total_revenue
         
-
     from
         customer_enriched ce
 
@@ -90,12 +89,10 @@ max_date as (
         customer_enriched
 ),
 
-
 latest_customer as (
 
     select *
     from (
-
         select
             *,
             row_number() over (
@@ -104,11 +101,10 @@ latest_customer as (
             ) as rn
 
         from {{ ref('dim_customers') }}
-
     )
+
     where rn = 1
 ),
-
 
 customer_type as (
     select
@@ -121,7 +117,6 @@ customer_type as (
         a.total_revenue,
         a.total_revenue / nullif(a.total_orders, 0) as avg_order_value,
         datediff('day', lo.last_order_date, md.max_date) as recency_days,
-
 
         fo.first_order_date,
 
