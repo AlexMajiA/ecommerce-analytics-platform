@@ -49,4 +49,5 @@ sentiment as (
 
 select *
 from sentiment
+{{ limit_dev(100) }}
 
