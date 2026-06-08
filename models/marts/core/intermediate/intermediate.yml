@@ -1,0 +1,47 @@
+version: 2
+ 
+models:
+  # INT_ORDER_REVIEWS_ENRICHED
+  - name: int_order_reviews_enriched
+    description: "Order reviews enriched with AI_TRANSLATE (Portuguese to English) and CORTEX.SENTIMENT score. NULL comments are handled explicitly to avoid unnecessary Cortex API calls."
+ 
+    columns:
+      - name: review_id
+        description: "Order reviews enriched with AI_TRANSLATE and CORTEX.SENTIMENT. 
+                      Note: review_id contains duplicates in the source dataset (Olist raw data quality issue). 
+                      Monitored as warning, not error."
+        tests:
+          - not_null
+          - unique:
+              config:
+                severity: warn
+                warn_if: ">= 1"
+ 
+      - name: order_id
+        description: "Order identifier. Not unique — a single order can have multiple reviews in the Olist dataset."
+        tests:
+          - not_null
+ 
+      - name: review_score
+        description: "Star rating given by the customer (1 to 5)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: [1, 2, 3, 4, 5]
+ 
+      - name: review_comment_message
+        description: "Original review text in Portuguese. NULL when customer did not leave a text comment."
+ 
+      - name: review_comment_message_translated
+        description: "Review text translated to English using AI_TRANSLATE. NULL when original message is NULL."
+ 
+      - name: review_sentiment
+        description: "Sentiment score between -1 (negative) and +1 (positive) calculated by CORTEX.SENTIMENT. NULL when translated message is NULL."
+ 
+      - name: review_creation_date
+        description: "Date when the review was created"
+        tests:
+          - not_null
+ 
+      - name: review_answer_timestamp
+        description: "Timestamp when the seller answered the review"
