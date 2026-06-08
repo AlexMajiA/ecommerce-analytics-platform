@@ -21,7 +21,7 @@ final as (
         
         DATE_TRUNC('month', oi.order_timestamp) as month_year,
 
-        avg(r.review_sentiment)   as avg_sentiment,
+        avg(r.review_sentiment)   as avg_review_sentiment,
         avg(r.review_score)       as avg_review_score,
         count(oi.product_id)      as total_orders
 
@@ -39,4 +39,6 @@ final as (
 select *
 from
     final
+
+
 
