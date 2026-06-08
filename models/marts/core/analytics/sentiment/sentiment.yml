@@ -1,0 +1,70 @@
+version: 2
+ 
+models:
+  # MART_REVIEW_SENTIMENT
+  - name: mart_review_sentiment
+    description: "Sentiment metrics aggregated by product, seller and month. Combines int_order_reviews_enriched with int_sales_order_items."
+ 
+    columns:
+      - name: product_id
+        description: "Unique identifier of the product"
+        tests:
+          - not_null
+ 
+      - name: seller_id
+        description: "Unique identifier of the seller"
+        tests:
+          - not_null
+ 
+      - name: month_year
+        description: "First day of the month for the aggregation period"
+        tests:
+          - not_null
+ 
+      - name: avg_sentiment
+        description: "Average Cortex sentiment score (-1 to +1). NULL when no reviews with text exist for this product/seller/month combination."
+ 
+      - name: avg_review_score
+        description: "Average star rating (1-5) for this product/seller/month combination."
+ 
+      - name: total_orders
+        description: "Number of distinct orders for this product/seller/month combination."
+        tests:
+          - not_null
+ 
+    tests:
+      - dbt_utils.unique_combination_of_columns:
+          combination_of_columns:
+            - product_id
+            - seller_id
+            - month_year
+ 
+ 
+  # MART_CATEGORY_SENTIMENT
+  - name: mart_category_sentiment
+    description: "Sentiment metrics aggregated by product category. Combines int_order_reviews_enriched, int_sales_order_items and dim_products."
+ 
+    columns:
+      - name: product_category_name_english
+        description: "Product category name in English. NULL for products without category."
+ 
+      - name: avg_sentiment
+        description: "Average Cortex sentiment score (-1 to +1) for the category. NULL when no reviews with text exist."
+ 
+      - name: avg_review_score
+        description: "Average star rating (1-5) for the category."
+ 
+      - name: reviews_text
+        description: "Number of reviews that contain a text comment for this category."
+        tests:
+          - not_null
+ 
+      - name: total_orders
+        description: "Number of distinct orders for this category."
+        tests:
+          - not_null
+ 
+      - name: total_products
+        description: "Total number of items sold in this category."
+        tests:
+          - not_null

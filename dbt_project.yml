@@ -45,17 +45,25 @@ models:
       +schema: STAGING
       +materialized: view
 
-    # INTERMEDIATE
-    intermediate:
-      +database: OLIST_DB_SILVER
-      +schema: INTERMEDIATE
-      +materialized: view
-
     # GOLD (MARTS)
     marts:
-      +database: OLIST_DB_GOLD
-      +schema: ANALYTICS
-      +materialized: table
+      core:
+        # INTERMEDIATE
+        intermediate:
+          +database: OLIST_DB_SILVER
+          +schema: INTERMEDIATE
+          +materialized: table
+
+        # DIMS Y FACTS
+        sales:
+          +database: OLIST_DB_GOLD
+          +schema: ANALYTICS
+          +materialized: table
+
+        analytics:
+          +database: OLIST_DB_GOLD
+          +schema: ANALYTICS
+          +materialized: table
 
 
 
