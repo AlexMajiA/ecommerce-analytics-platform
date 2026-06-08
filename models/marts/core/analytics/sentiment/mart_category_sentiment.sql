@@ -44,8 +44,8 @@ aggregated as (
     select
         product_category_name_english,
 
-        avg(review_sentiment)            as avg_sentiment,
-        avg(review_score)                as avg_score,
+        avg(review_sentiment)            as avg_review_sentiment,
+        avg(review_score)                as avg_review_score,
         count(review_comment_message)    as reviews_text,
         count(distinct order_id)         as total_orders,
         count(order_item_id)             as total_products
