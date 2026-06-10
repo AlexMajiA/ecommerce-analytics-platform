@@ -20,6 +20,8 @@ The objective is to design a scalable and maintainable data platform oriented to
 
 ## Architecture
 
+![Data Architecture](images/architecture.png)
+
 - **Data Warehouse:** Snowflake  
 - **Transformation approach:** ELT  
 - **Transformation tool:** dbt  
@@ -84,6 +86,12 @@ END AS review_sentiment
 - Materialized as **table** (not view) — Cortex is called once per `dbt run`, not on every query
 - Enrichment placed in **intermediate layer** — all sentiment marts inherit from a single source of truth
 - **Cross-region inference** required for EU accounts: `ALTER ACCOUNT SET CORTEX_ENABLED_CROSS_REGION = 'AWS_EU'`
+
+
+## dbt Lineage (DAG)
+
+![dbt DAG](images/dbt_dag.png)
+
 
 ---
 
